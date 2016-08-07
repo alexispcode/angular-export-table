@@ -2,8 +2,8 @@
  * Created by mmasuyama on 9/2/2015.
  */
 
-var tableExportCtrl = function($element, $attrs, $document) {
-  var ctrl = this;
+var tableExportCtrl = ['$element', '$attrs', '$document', function($element, $attrs, $document) {
+    var ctrl = this;
 
     var elementScope = $element.isolateScope();
 
@@ -23,7 +23,7 @@ var tableExportCtrl = function($element, $attrs, $document) {
         })
     }
 
-    function setProperty (obj, param, value) {
+    function setProperty(obj, param, value) {
         Object.defineProperty(ctrl[obj], param, {
             value: value,
             writable: true,
@@ -33,14 +33,14 @@ var tableExportCtrl = function($element, $attrs, $document) {
     }
 
 
-    if(elementScope.ctrl.tableSelector) {
-        ctrl.tableElement = $('#'+elementScope.ctrl.tableSelector);
+    if (elementScope.ctrl.tableSelector) {
+        ctrl.tableElement = $('#' + elementScope.ctrl.tableSelector);
         //ctrl.tableElement = document.getElementById(elementScope.ctrl.tableSelector).value;
     }
 
     //TODO allow to define diiferents methods
-    $element.on('click', function(e){
-        if(!ctrl.disableClick){
+    $element.on('click', function(e) {
+        if (!ctrl.disableClick) {
             exportTable();
         }
     });
@@ -50,46 +50,46 @@ var tableExportCtrl = function($element, $attrs, $document) {
 
     //exports
 
-    angular.extend(ctrl,{
-        defaultOptions : defaultOptions,
-        exportTableFn : exportTable,
-        setProperty : setProperty
+    angular.extend(ctrl, {
+        defaultOptions: defaultOptions,
+        exportTableFn: exportTable,
+        setProperty: setProperty
     })
-};
+}];
 
 var compileExportTable = function($element, $attrs, transcludeFn) {
 
 };
 
 angular.module('ceibo.components.table.export', [])
-  .controller('tableExportCtrl', tableExportCtrl)
-  .directive('tableExport', function(){
-      return {
-          //require: 'table',
-          scope: {
-              /**
-               * options : {
-               *     formats : {
-               *        pdf: //boolean,
-               *        xls: //boolean
-               *     }
-               * }
-               *
-               *
-               **/
-              exportOptions: '=',
-              /*
-                selector : { selectorType: selector }
-               */
+    .controller('tableExportCtrl', tableExportCtrl)
+    .directive('tableExport', function() {
+        return {
+            //require: 'table',
+            scope: {
+                /**
+                 * options : {
+                 *     formats : {
+                 *        pdf: //boolean,
+                 *        xls: //boolean
+                 *     }
+                 * }
+                 *
+                 *
+                 **/
+                exportOptions: '=',
+                /*
+                  selector : { selectorType: selector }
+                 */
 
-              tableSelector: '=' //selector that this element is refering refers.
+                tableSelector: '=' //selector that this element is refering refers.
 
-          }, //isolate or not
-          restrict : 'AEC', //A = attribute, C = class, E = Element
-          controller: 'tableExportCtrl as ctrl',
-          compile: compileExportTable,
-          bindToController: true //true or false
-      }
-  })
+            }, //isolate or not
+            restrict: 'AEC', //A = attribute, C = class, E = Element
+            controller: 'tableExportCtrl as ctrl',
+            compile: compileExportTable,
+            bindToController: true //true or false
+        }
+    })
 
 ;
